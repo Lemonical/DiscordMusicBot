@@ -1,0 +1,1 @@
+﻿await new DiscordService().InitializeAsync();

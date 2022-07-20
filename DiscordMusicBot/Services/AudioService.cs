@@ -6,7 +6,6 @@ using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 using DiscordMusicBot.Extensions;
 using DiscordMusicBot.GuildPlayer;
-using Fergun.Interactive;
 using Fergun.Interactive.Pagination;
 using Victoria;
 using Victoria.Enums;
@@ -589,19 +588,14 @@ public class AudioService
         if (!guildPlayer.Tracks.Any())
             return EmbedHandler.BuildFailedEmbed("\\❌ There's nothing to remove!", user);
 
-        else
-        {
-            // Currently, the index here must not be 0! We'll subtract it after
-            if (index > guildPlayer.Tracks.Count || index < 1)
-                return EmbedHandler.BuildFailedEmbed("\\❌ Invalid index", user);
+        // The index here must not be 0
+        if (index > guildPlayer.Tracks.Count || index < 1)
+            return EmbedHandler.BuildFailedEmbed("\\❌ Invalid index", user);
 
-            index--;
+        // Get details of the track
+        var removingTrack = guildPlayer.RemoveAt(index - 1);
 
-            // Get details of the track
-            var removingTrack = guildPlayer.RemoveAt(index);
-
-            return await EmbedHandler.BuildRemovedQueueEmbedAsync(removingTrack, user);
-        }
+        return await EmbedHandler.BuildRemovedQueueEmbedAsync(removingTrack, user);
     }
 
     public async Task<Embed> SeekAsync(IGuild guild, IUser user, TimeSpan ts)

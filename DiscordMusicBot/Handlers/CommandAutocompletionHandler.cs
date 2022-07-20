@@ -58,13 +58,10 @@ public class CommandAutocompletionHandler : AutocompleteHandler
 
     private SearchType ResolveSearchType(string enumValue, string query)
     {
-        var service = Uri.IsWellFormedUriString(query, UriKind.Absolute) 
+        return Uri.IsWellFormedUriString(query, UriKind.Absolute)
             ? SearchType.Direct
-            : SearchType.YouTube;
-        
-        if (!string.IsNullOrWhiteSpace(enumValue))
-            service = Enum.Parse<SearchType>(enumValue, true);
-
-        return service;
+            : !string.IsNullOrWhiteSpace(enumValue)
+                ? Enum.Parse<SearchType>(enumValue, true)
+                : SearchType.YouTube;
     }
 }

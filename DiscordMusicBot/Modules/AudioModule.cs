@@ -3,7 +3,6 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using DiscordMusicBot.Attributes;
 using Fergun.Interactive;
-using Victoria.Responses.Search;
 
 namespace DiscordMusicBot.Modules;
 
@@ -20,15 +19,14 @@ public class AudioModule : InteractionModuleBase
     {
         await RespondAsync(embed: await Music.LeaveAsync(Context.Guild, Context.User));
     }
-
+    
     [SlashCommand("play",
         "Resume paused track or add a track. Bot will join the voice channel if it's not already in one.")]
     public async Task PlayMusicAsync(
-        [AutocompleteParameter] [Summary(description: "(Soundcloud or Youtube) URL or Youtube search terms.")]
+        [AutocompleteParameter] [Summary(description: "Direct link or search terms.")]
         string query = null,
-        [MusicService(SearchType.SoundCloud, SearchType.YouTube, SearchType.YouTubeMusic)]
         [Summary(description: "Service to search in 'query' (Default is Youtube). This is ignored if direct link is given.")]
-        SearchType service = SearchType.YouTube)
+        MusicServices service = MusicServices.YouTube)
     {
         await DeferAsync();
         var embed = await Music.PlayAsync(Context.Guild, Context.User, (ITextChannel)Context.Channel,

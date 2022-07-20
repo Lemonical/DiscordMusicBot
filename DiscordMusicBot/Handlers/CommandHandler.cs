@@ -44,7 +44,7 @@ public class CommandHandler
             var context = new SocketInteractionContext(_client, arg);
             
             if (arg.Type is InteractionType.MessageComponent or InteractionType.ModalSubmit &&
-                await RespondToComponentsAsync(arg).ConfigureAwait(false))
+                await RespondToComponentsAsync(arg))
                 return;
 
             var preconditionResult = await CheckPreconditionsAsync(arg, context);
@@ -83,6 +83,7 @@ public class CommandHandler
         // Command handling
         var argPos = 0;
 
+        // TODO: Add text-based commands
         if (message.HasStringPrefix(BotConfig.Load().Prefix, ref argPos))
         {
             var result = await _commandService.ExecuteAsync(context, argPos, _services);
